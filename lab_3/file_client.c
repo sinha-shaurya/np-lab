@@ -46,8 +46,11 @@ int main()
 			memset(s, 0, sizeof(s));
 			scanf("%s", s);
 			send(sockfd, &s, MAX_SIZE, 0);
+		case 3:
+			memset(s, 0, sizeof(s));
+			recv(sockfd, &s, MAX_SIZE, 0);
+			puts(s);
 		}
-		puts(s);
 	}
 	close(sockfd);
 	return 0;
