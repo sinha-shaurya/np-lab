@@ -39,7 +39,7 @@ int main()
 
 	for (i = 0;; i += 1)
 	{
-		printf("Enter the number to which we check palindrome or -1 to exit the program\n");
+		printf("Enter the string to which we check palindrome or -1 to exit the program\n");
 		char buffer[MAXSIZE];
 		scanf("%s", buffer);
 
