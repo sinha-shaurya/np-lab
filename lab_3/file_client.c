@@ -6,7 +6,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <unistd.h>
-#define PORT 8008
+#define PORT 8000
 #define MAX_SIZE 1024
 int main()
 {
@@ -46,10 +46,24 @@ int main()
 			memset(s, 0, sizeof(s));
 			scanf("%s", s);
 			send(sockfd, &s, MAX_SIZE, 0);
+			int count;
+			recv(sockfd,&count,sizeof(int),0);
+			printf("Number of occurences are %d\n",count);
+			break;
+		case 2:
+			printf("Enter old word\n");
+			memset(s,0,sizeof(s));
+			scanf("%s",s);
+			send(sockfd,&s,sizeof(s),0);
+			printf("Enter new word\n");
+			memset(s,0,sizeof(s));
+			scanf("%s",s);
+			send(sockfd,s,sizeof(s),0);
 		case 3:
 			memset(s, 0, sizeof(s));
 			recv(sockfd, &s, MAX_SIZE, 0);
 			puts(s);
+			break;
 		}
 	}
 	close(sockfd);

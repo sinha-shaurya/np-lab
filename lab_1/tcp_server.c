@@ -15,29 +15,17 @@ bool compare_to(char *a)
 {
     return a[0] == 'e' && a[1] == 'x' && a[2] == 'i' && a[3] == 't';
 }
-int comparator_increasing(int* a,int* b)
+int comparator_increasing(const void *a, const void *b)
 {
-	return *(int*)a-*(int*)b;
+    return *(int *)a - *(int *)b;
 }
-int comparator_decreasing(const void *a,const void* b)
+void display(int *a, int n)
 {
-	return *(int*)b-*(int*)a;
-}
-int search(int *a,int size,int key)
-{
-    for(int i=0;i<size;i++)
+    for (int i = 0; i < n; i++)
     {
-        if(a[i]==key) return i;
+        printf("%d ", a[i]);
     }
-    return -1;
-}
-void display(int *a,int n)
-{
-	for(int i=0;i<n;i++)
-	{
-		printf("%d ",a[i]);
-	}
-	printf("\n");
+    printf("\n");
 }
 int main()
 {
@@ -68,39 +56,22 @@ int main()
     }
     client_len = sizeof(cliaddr);
     csockfd = accept(sockfd, (struct sockaddr *)&cliaddr, &client_len);
-
     int a[MAX_SIZE];
-    int size = 0;
-    int choice=0;
-	int key=0;
-    memset(a, 0, MAX_SIZE);
-    int i = 0;
+    char buffer[MAX_SIZE];
+    int size;
     for (;;)
     {
-        char c[MAX_SIZE];
-        recv(csockfd, &c, MAX_SIZE, 0);
-        printf("%s\n",c);
-        if(compare_to(c)==true)
-        {
-          printf("breaking");
-          close(sockfd);
-	      exit(EXIT_SUCCESS);
-          break;
-        }   
-        int receive_array = recv(csockfd, &a, MAX_SIZE, 0);
-        int receive_size = recv(csockfd, &size, sizeof(int), 0);
-		int receive_choice=recv(csockfd,&choice,sizeof(int),0);
-        switch(choice)
-		{
-			case 1:
-			qsort(a,size,sizeof(int),comparator_inceasing);
-			send(csockfd,&a,MAX_SIZE,0);
-			case 2:
-			qsort(a,size,sizeof(int),comparator_decreasing);
-			send(csockfd,&a,MAX_SIZE,0);
-			case 3:
-			
-        i++;
+        memset(a, 0, sizeof(a));
+        memset(buffer, 0, sizeof(buffer));
+        recv(csockfd, &size, sizeof(int), 0);
+        recv(csockfd, &a, MAX_SIZE, 0);
+        display(a,size);
+        qsort(a, size, sizeof(int), comparator_increasing);
+        send(csockfd, &a, MAX_SIZE, 0);
+        recv(csockfd, buffer, MAX_SIZE, 0);
+        puts(buffer);
+        if (compare_to(buffer))
+            break;
     }
 
     close(sockfd);

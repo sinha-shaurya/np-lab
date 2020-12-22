@@ -6,8 +6,13 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <unistd.h>
+#include <stdbool.h>
 #define PORT 8000
 #define MAX_SIZE 1024
+bool compare_to(char *a)
+{
+    return a[0] == 'e' && a[1] == 'x' && a[2] == 'i' && a[3] == 't';
+}
 int main()
 {
     int sockfd;
@@ -20,32 +25,34 @@ int main()
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     int n = connect(sockfd, (struct sockaddr *)&servaddr, sizeof(servaddr));
 
-    int a[MAX_SIZE];
-    memset(a, 0, sizeof(a));
-    int num = 3;
-    char s[MAX_SIZE];
-    //input a
-    printf("Enter array size\n");
-    scanf("%d", &num);
-    printf("Enter array elements\n");
-    for (int i = 0; i < num; i++)
-    {
-        int x;
-        scanf("%d", &x);
-        a[i] = x;
-    }
     for (;;)
     {
-        scanf("%s", s);
-        int sent_string=send(sockfd,&s,MAX_SIZE,0);
-        int sent_bytes = send(sockfd, &a, MAX_SIZE, 0);
-        sent_bytes = send(sockfd, &num, sizeof(int), 0);
-        printf("%d\n", sent_bytes);
-        if(strcmp(s,"exit")==0)
+        int a[MAX_SIZE];
+        char buffer[MAX_SIZE];
+        memset(a, 0, sizeof(a));
+        int len;
+        printf("Enter array length\n");
+        scanf("%d", &len);
+        printf("Enter array elements\n");
+        for (int i = 0; i < len; i++)
         {
-        	close(sockfd);
-        	exit(EXIT_SUCCESS);
+            int x;
+            scanf("%d", &x);
+            a[i] = x;
         }
+        send(sockfd, &len, sizeof(int), 0);
+        send(sockfd, &a, MAX_SIZE, 0);
+        memset(a, 0, sizeof(a));
+        recv(sockfd, &a, MAX_SIZE, 0);
+        for (int i = 0; i < len; i++)
+        {
+            printf("%d ", a[i]);
+        }
+        printf("continue or exit?\n");
+        scanf("%s", buffer);
+        send(sockfd, buffer, strlen(buffer), 0);
+        if(compare_to(buffer))
+            break;
     }
     close(sockfd);
     return 0;
