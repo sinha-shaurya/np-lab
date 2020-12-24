@@ -52,6 +52,7 @@ int main()
 	for (i = 0;; i += 1)
 	{
 		actuallen = sizeof(clientaddr);
+		buff_ans=0;
 		recedbytes = recvfrom(sockfd, buffer, MAXSIZE, 0, (struct sockaddr *)&clientaddr, &actuallen);
 
 		if (recedbytes == -1)

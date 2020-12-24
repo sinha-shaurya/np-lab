@@ -39,7 +39,7 @@ int main()
 
 	for (i = 0;; i += 1)
 	{
-		printf("Enter the string to which we check palindrome or -1 to exit the program\n");
+		printf("Enter string ,-1 to exit\n");
 		char buffer[MAXSIZE];
 		scanf("%s", buffer);
 
@@ -59,11 +59,11 @@ int main()
 		recedbytes = recvfrom(sockfd, &buff_ans, sizeof(buff_ans), 0, (struct sockaddr *)&serveraddr, &size);
 		if (buff_ans == 1)
 		{
-			printf("It is a palindrome\n");
+			printf("Palindrome\n");
 		}
 		else
 		{
-			printf("It is not a palindrome\n");
+			printf("Not palindrome\n");
 		}
 	}
 
